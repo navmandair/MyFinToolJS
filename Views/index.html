@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="/style.css">
+	<title>My Fin Tool</title>
+</head>
+
+<body>
+	<form action="/result" method="POST">
+		<input id="ticker_search" name="ticker_search" type="text" required>
+    <input id="start_date" name="start_date" type="date" required>
+    <input id="end_date" name="end_date" type="date" required>
+    <label for="period">Choose a period:</label>
+    <select name="period" id="period">
+     <option value="d">Daily</option>
+     <option value="w">Weekly</option>
+     <option value="m">Monthly</option>
+     <option value="v">Dividends Only</option>
+    </select>
+    <input type = "submit" value = "Submit">
+   </form>
+</body>
+
+</html>
