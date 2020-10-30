@@ -17,12 +17,18 @@ app.post('/result', (req, res) => {
     symbol: req.body.ticker_search,
     from: req.body.start_date,
     to: req.body.end_date,
-    period: req.body.period // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
+    period: req.body.period
   }, function(err, quotes) {
-    res.send(quotes);
+    res.send(sip_performance(quotes));
   });
 })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+
+function sip_performance(data)
+{
+  return data
+}
