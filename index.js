@@ -12,14 +12,13 @@ app.get('/', (req, res) => {
 })
 
 app.post('/result', (req, res) => {
-  console.log(req);
   yahooFinance.historical({
     symbol: req.body.ticker_search,
     from: req.body.start_date,
     to: req.body.end_date,
     period: req.body.period
   }, function(err, quotes) {
-    res.send(sip_performance(quotes));
+    res.send(sip_performance(quotes, 50));
   });
 })
 
@@ -28,7 +27,15 @@ app.listen(port, () => {
 })
 
 
-function sip_performance(data)
-{
-  return data
+function sip_performance(data, amount_investing) {
+  amount_invested = 0;
+  number_of_shares = 0;
+  data.forEach(el =>
+  { 
+    amount_invested = amount_invested + amount_investing
+    number_of_shares = number_of_shares + amount_investing/el.adjClose;
+  })
+  current_value = number_of_shares * data[data.length-1].adjClose;
+  total_gain = current_value - amount_invested
+  return {"total_gain":total_gain}
 }
