@@ -12,14 +12,19 @@ app.get('/', (req, res) => {
 })
 
 app.post('/result', (req, res) => {
+
   yahooFinance.historical({
     symbol: req.body.ticker_search,
     from: req.body.start_date,
     to: req.body.end_date,
     period: req.body.period
   }, function(err, quotes) {
-    res.send(sip_performance(quotes, 50));
+    if(quotes.length != 0)
+      {res.send(sip_performance(quotes, 50));}
+    else
+      {res.send({})}
   });
+  
 })
 
 app.listen(port, () => {
