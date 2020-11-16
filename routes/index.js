@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/result', (req, res) => {
   yahooFinance.historical({
-    symbol: req.query.ticker_search,
+    symbol: req.query.ticker,
     from: req.query.start_date,
     to: req.query.end_date,
     period: req.query.period
