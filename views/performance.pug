@@ -7,6 +7,8 @@ block content
       th Start Date
       th End Date
       th Period
+      th Amount Invested
+      th Current Value
       th Total Gain
       th Performance Per Year*
     each row in rows
@@ -15,6 +17,28 @@ block content
         td= row.start_date
         td= row.end_date
         td= row.period
+        td= row.amount_invested
+        td= row.current_value
         td= row.total_gain
         td= row.performance_pa
+      tr
+  p
+  table.table.table-striped
+    tr
+      th Date
+      th Open
+      th High
+      th Low
+      th Close
+      th Volume
+      th Adjust Close
+    each row in data_rows
+      tr
+        td= row.date
+        td= row.open
+        td= row.high
+        td= row.low
+        td= row.close
+        td= row.volume
+        td= row.adjClose
       tr
