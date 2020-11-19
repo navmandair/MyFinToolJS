@@ -14,7 +14,6 @@ router.get('/result', (req, res) => {
     var from_date = req.query.start_date;
     var to_date = req.query.end_date
     var period = req.query.period;
-    var period = req.query.period;
     var amount = parseInt(req.query.amount);
     yahooFinance.historical({
       symbol: ticker,
@@ -24,7 +23,12 @@ router.get('/result', (req, res) => {
     },
       function(err, quotes) {
         if (quotes.length != 0) {
-          res.render('performance', sip_performance(ticker, from_date, period, quotes.reverse(), amount))
+          try
+          {res.render('performance', sip_performance(ticker, from_date, period, quotes.reverse(), amount))}
+          catch(e)
+          {
+            res.send("Something went wrong! please check start date")
+          }
         }
         else {
           res.render('performance', { "rows": [], "data_rows": [] })
@@ -33,7 +37,7 @@ router.get('/result', (req, res) => {
   }
   catch(e)
   {
-    res.send("Something went wrong")
+    res.send("Something went wrong!")
   }
 })
 
@@ -51,6 +55,9 @@ function sip_performance(ticker, from_date, period, data, amount_investing) {
       number_of_shares = number_of_shares + (amount_investing / el.adjClose);
     }
   });
+
+  if(new_data.length == 0)
+    throw no_data_found_2;
 
   oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   first_date = new_data[0].date;
