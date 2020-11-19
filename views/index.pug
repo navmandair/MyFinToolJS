@@ -3,17 +3,18 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  form(action="/result" method="GET")
-    p Ticker:
-      input(type="text" id="ticker" name="ticker" placeholder="")
-    p Start Date:
-      input(type="date" id="start_date" name="start_date" placeholder="")
-    p End Date:
-      input(type="date" id="end_date" name="end_date" placeholder="")
-    p Amount:
-      input(type="number" id="amount" name="amount" value=50)
-    p Period:
-      select(id="period" name="period")
-        option(value="d") Daily
-        option(value="w") Weekly
-    input(type="submit")
+  div.form-group
+    form(action="/result" method="GET")
+      p Ticker:
+        input(type="text" id="ticker" name="ticker" placeholder="").form-control
+      p Start Date:
+        input(type="date" id="start_date" name="start_date" placeholder="").form-control
+      p End Date:
+        input(type="date" id="end_date" name="end_date" placeholder="").form-control
+      p Amount:
+        input(type="number" id="amount" name="amount" value=50).form-control
+      p Period:
+        select(id="period" name="period").form-control
+          option(value="d") Daily
+          option(value="w") Weekly
+      button(type="submit").btn.btn-primary Submit
