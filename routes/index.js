@@ -74,10 +74,10 @@ function sip_performance(ticker, from_date, period, data, amount_investing) {
       "start_date": new Date(first_date).toDateString(),
       "end_date": new Date(last_date).toDateString(),
       "period": period,
-      "amount_invested": amount_invested,
-      "current_value": current_value,
-      "total_gain": total_gain,
-      "performance_pa": performance_pa
+      "amount_invested": amount_invested.toFixed(2),
+      "current_value": current_value.toFixed(2),
+      "total_gain": total_gain.toFixed(2),
+      "performance_pa": performance_pa.toFixed(2)
     }],
     "data_rows": new_data
   }
