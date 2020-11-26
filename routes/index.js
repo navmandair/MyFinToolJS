@@ -8,41 +8,46 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/result', (req, res) => {
-  try
-  {
-    var ticker = req.query.ticker;
+  try {
+    var tickers = req.query.tickers;
     var from_date = req.query.start_date;
     var to_date = req.query.end_date
     var period = req.query.period;
     var amount = parseInt(req.query.amount);
-    yahooFinance.historical({
-      symbol: ticker,
-      from: from_date,
-      to: to_date,
-      period: "d"
-    },
-      function(err, quotes) {
-        if (quotes.length != 0) {
-          try
-          {res.render('performance', sip_performance(ticker, from_date, period, quotes.reverse(), amount))}
-          catch(e)
-          {
-            res.send("Something went wrong! please check start date")
-          }
-        }
-        else {
-          res.render('performance', { "rows": [], "data_rows": [] })
-        }
-      });
+    tickers = tickers.split(',');
+    historicalDataMultiple(tickers, from_date, to_date, period, amount).then(
+  function(value) {res.render('performance', { "rows": value});},
+  function(error) {res.render('performance', { "rows": []});}
+);
+    
   }
-  catch(e)
-  {
-    res.send("Something went wrong!")
+  catch (e) {
+    res.send("Something went wrong! " + e)
   }
 })
 
+async function historicalDataMultiple(tickers, from_date, to_date, period, amount) {
+  var rows = [];
+  await tickers.forEach(async ticker => {
+      let row = historicalData(ticker, from_date, to_date, period, amount);
+      rows.push(row);
+    });
+  rows = await Promise.all(rows);
+  return rows;
+}
 
-function sip_performance(ticker, from_date, period, data, amount_investing) {
+async function historicalData(ticker, from_date, to_date, period, amount) {
+  let promise = yahooFinance.historical({
+    symbol: ticker,
+    from: from_date,
+    to: to_date,
+    period: "d"
+  });
+  let quotes = await promise;
+  return performance(ticker, from_date, period, quotes.reverse(), amount);
+}
+
+function performance(ticker, from_date, period, data, amount_investing) {
   amount_invested = 0;
   number_of_shares = 0;
   day_of_investing = new Date(from_date).getDay();
@@ -56,7 +61,7 @@ function sip_performance(ticker, from_date, period, data, amount_investing) {
     }
   });
 
-  if(new_data.length == 0)
+  if (new_data.length == 0)
     throw no_data_found_2;
 
   oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
@@ -69,16 +74,14 @@ function sip_performance(ticker, from_date, period, data, amount_investing) {
   total_gain = (current_value - amount_invested) / amount_invested * 100;
   performance_pa = total_gain / years_invested;
   return {
-    "rows": [{
-      "ticker": ticker,
-      "start_date": new Date(first_date).toDateString(),
-      "end_date": new Date(last_date).toDateString(),
-      "period": period,
-      "amount_invested": amount_invested.toFixed(2),
-      "current_value": current_value.toFixed(2),
-      "total_gain": total_gain.toFixed(2),
-      "performance_pa": performance_pa.toFixed(2)
-    }],
+    "ticker": ticker,
+    "start_date": new Date(first_date).toDateString(),
+    "end_date": new Date(last_date).toDateString(),
+    "period": period,
+    "amount_invested": amount_invested.toFixed(2),
+    "current_value": current_value.toFixed(2),
+    "total_gain": total_gain.toFixed(2),
+    "performance_pa": performance_pa.toFixed(2),
     "data_rows": new_data
   }
 }
