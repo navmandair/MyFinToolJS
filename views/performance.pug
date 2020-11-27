@@ -1,12 +1,15 @@
 extends layout
 
 block content
+  
   table.table.table-striped.table-responsive
     tr
       th Ticker
       th Start Date
       th End Date
       th Period
+      th Avg Price
+      th Last Price
       th Amount Invested
       th Current Value
       th Total Gain %
@@ -17,6 +20,8 @@ block content
         td= row.start_date
         td= row.end_date
         td= row.period
+        td= row.avg_price_per_share
+        td= row.last_price
         td= row.amount_invested
         td= row.current_value
         td= row.total_gain

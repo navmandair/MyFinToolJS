@@ -16,8 +16,8 @@ router.get('/result', (req, res) => {
     var amount = parseInt(req.query.amount);
     tickers = tickers.split(',');
     historicalDataMultiple(tickers, from_date, to_date, period, amount).then(
-  function(value) {res.render('performance', { "rows": value});},
-  function(error) {res.render('performance', { "rows": []});}
+  function(value) {res.render('performance', { "error": "No Error", "rows": value});},
+  function(error) {res.render('performance', { "error": error, "rows": []});}
 );
     
   }
@@ -71,6 +71,7 @@ function performance(ticker, from_date, period, data, amount_investing) {
   days_invested = Math.round(Math.abs((last_date - first_date) / oneDay));
   years_invested = days_invested / 365;
   current_value = number_of_shares * last_price;
+  avg_price_per_share = amount_invested / number_of_shares;
   total_gain = (current_value - amount_invested) / amount_invested * 100;
   performance_pa = total_gain / years_invested;
   return {
@@ -78,6 +79,8 @@ function performance(ticker, from_date, period, data, amount_investing) {
     "start_date": new Date(first_date).toDateString(),
     "end_date": new Date(last_date).toDateString(),
     "period": period,
+    "avg_price_per_share": avg_price_per_share.toFixed(2),
+    "last_price": last_price.toFixed(2),
     "amount_invested": amount_invested.toFixed(2),
     "current_value": current_value.toFixed(2),
     "total_gain": total_gain.toFixed(2),

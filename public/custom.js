@@ -1,5 +1,5 @@
 $(function() {
-  $("#ticker").autocomplete({
+  $("#tickers").autocomplete({
     source: function(request, response) {
       $.ajax({
         url: "/ticker/search",
