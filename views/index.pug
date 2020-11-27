@@ -6,7 +6,8 @@ block content
   div.form-group
     form(action="/result" method="GET")
       p Ticker:
-        input(type="text" id="tickers" name="tickers" placeholder="").form-control
+        select(type="text" id="tickers" name="tickers" placeholder="" multiple="multiple" ).form-control
+          
       p Start Date:
         input(type="date" id="start_date" name="start_date" placeholder="").form-control
       p End Date:

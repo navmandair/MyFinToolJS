@@ -1,4 +1,4 @@
-$(function() {
+/*$(function() {
   $("#tickers").autocomplete({
     source: function(request, response) {
       $.ajax({
@@ -16,8 +16,7 @@ $(function() {
     select: function(event, ui) {
     }
   });
-});
-
+});*/
 
 $(document).ready(function() {
   var now = new Date();
@@ -25,5 +24,43 @@ $(document).ready(function() {
   var month = ("0" + (now.getMonth() + 1)).slice(-2);
   var today = now.getFullYear() + "-" + (month) + "-" + (day);
   $('#end_date').val(today);
+
+});
+
+$(document).ready(function() {
+
+$('#tickers').select2({
+  ajax: {
+    url: '/ticker/search',
+
+    delay: 250,
+
+    data: function (params) {
+      var query = {
+        search_key: params.term,
+        type: 'public'
+      }
+      return query;
+    },
+
+    processResults: function (arrayData, params) {
+      
+      var data = $.map(arrayData, function (obj) 
+      {
+        obj.id = obj.id || obj.value; // replace pk with your identifier
+        return obj;
+      });
+
+      var data = $.map(arrayData, function (obj)
+      {
+       obj.text = obj.text || obj.label; // replace name with the property used for the text
+      return obj;
+      });
+      return {
+        results: data
+      };
+    }
+  }
+});
 
 });

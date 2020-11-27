@@ -9,12 +9,20 @@ router.get('/', function(req, res, next) {
 
 router.get('/result', (req, res) => {
   try {
-    var tickers = req.query.tickers;
+    var tickers_raw = req.query.tickers;
     var from_date = req.query.start_date;
     var to_date = req.query.end_date
     var period = req.query.period;
     var amount = parseInt(req.query.amount);
-    tickers = tickers.split(',');
+    var tickers = []
+    if(Array.isArray(tickers_raw))
+    {
+      tickers = tickers_raw
+    }
+    else
+    {
+      tickers.push(tickers_raw)
+    }
     historicalDataMultiple(tickers, from_date, to_date, period, amount).then(
   function(value) {res.render('performance', { "error": "No Error", "rows": value});},
   function(error) {res.render('performance', { "error": error, "rows": []});}

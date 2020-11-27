@@ -7,6 +7,7 @@ const tickerSymbols = [{value:"A",label:"Agilent Technologies Inc."},{value:"AA"
 
 /* GET ticker */
 router.get('/search', function(req, res, next) {
+  console.log(req);
   try
   {
     var searchKey = req.query.search_key;
