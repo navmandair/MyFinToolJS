@@ -8,6 +8,8 @@ block content
       th Start Date
       th End Date
       th Period
+      th Stop Loss Hit Date
+      th Stop Loss*
       th Avg Price
       th Last Price
       th Amount Invested
@@ -20,6 +22,8 @@ block content
         td= row.start_date
         td= row.end_date
         td= row.period
+        td= row.lowest_close_from_last_date
+        td= row.stop_loss
         td= row.avg_price_per_share
         td= row.last_price
         td= row.amount_invested

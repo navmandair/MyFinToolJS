@@ -58,6 +58,10 @@ async function historicalData(ticker, from_date, to_date, period, amount) {
 function performance(ticker, from_date, period, data, amount_investing) {
   amount_invested = 0;
   number_of_shares = 0;
+  stop_loss = 0;
+  last_close = 0;
+  lowest_close_from_last = 0;
+  lowest_close_from_last_date = null;
   day_of_investing = new Date(from_date).getDay();
 
   new_data = [];
@@ -66,6 +70,14 @@ function performance(ticker, from_date, period, data, amount_investing) {
       new_data.push(el);
       amount_invested = amount_invested + amount_investing;
       number_of_shares = number_of_shares + (amount_investing / el.adjClose);
+      if(last_close > el.close && (last_close - el.close) > lowest_close_from_last)
+      {
+        lowest_close_from_last = (last_close - el.close);
+        console.log(ticker, el.date, last_close, el.close);
+        lowest_close_from_last_date = el.date;
+      }
+
+      last_close = el.close;
     }
   });
 
@@ -87,6 +99,8 @@ function performance(ticker, from_date, period, data, amount_investing) {
     "start_date": new Date(first_date).toDateString(),
     "end_date": new Date(last_date).toDateString(),
     "period": period,
+    "lowest_close_from_last_date": new Date(lowest_close_from_last_date).toDateString(),
+    "stop_loss" : stop_loss.toFixed(2),
     "avg_price_per_share": avg_price_per_share.toFixed(2),
     "last_price": last_price.toFixed(2),
     "amount_invested": amount_invested.toFixed(2),
