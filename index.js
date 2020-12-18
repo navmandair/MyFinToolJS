@@ -4,9 +4,7 @@ const app = express();
 const indexRouter = require('./routes/index');
 const tickerRouter = require('./routes/ticker');
 const dotenv = require('dotenv');
-
 const result = dotenv.config({ path: path.join(__dirname, 'custom.env')});
-
 if (result.error) {
   throw result.error
 }

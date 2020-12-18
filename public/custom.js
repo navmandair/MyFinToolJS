@@ -47,13 +47,13 @@ $('#tickers').select2({
       
       var data = $.map(arrayData, function (obj) 
       {
-        obj.id = obj.id || obj.value; // replace pk with your identifier
+        obj.id = obj.id || obj["1. symbol"]; // replace pk with your identifier
         return obj;
       });
 
       var data = $.map(arrayData, function (obj)
       {
-       obj.text = obj.text || obj.label; // replace name with the property used for the text
+       obj.text = obj.text || obj["2. name"]; // replace name with the property used for the text
       return obj;
       });
       return {
