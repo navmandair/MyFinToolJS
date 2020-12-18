@@ -33,7 +33,7 @@ $('#tickers').select2({
   ajax: {
     url: '/ticker/search',
 
-    delay: 250,
+    delay: 500,
 
     data: function (params) {
       var query = {
@@ -48,14 +48,10 @@ $('#tickers').select2({
       var data = $.map(arrayData, function (obj) 
       {
         obj.id = obj.id || obj["1. symbol"]; // replace pk with your identifier
+        obj.text = obj.text || obj["2. name"] + ' - ' + obj["1. symbol"];
         return obj;
       });
 
-      var data = $.map(arrayData, function (obj)
-      {
-       obj.text = obj.text || obj["2. name"]; // replace name with the property used for the text
-      return obj;
-      });
       return {
         results: data
       };

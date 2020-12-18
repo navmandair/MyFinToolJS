@@ -25,8 +25,14 @@ const searchTicker = (searchKey, callback)=> {
     })
 
     res.on('end', function() {
-      return callback(JSON.parse(data.toString()));
-      // your code here if you want to use the results !
+      try
+      {
+        return callback(JSON.parse(data.toString()));
+      }
+      catch
+      {
+        return callback({});
+      }
     });
   });
 
