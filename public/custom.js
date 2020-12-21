@@ -33,7 +33,7 @@ $('#tickers').select2({
   ajax: {
     url: '/ticker/search',
 
-    delay: 500,
+    delay: 1000,
 
     data: function (params) {
       var query = {
