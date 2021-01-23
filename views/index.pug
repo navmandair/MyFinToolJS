@@ -7,7 +7,6 @@ block content
     form(action="/result" method="GET")
       p Ticker:
         select(type="text" id="tickers" name="tickers" placeholder="" multiple="multiple" ).form-control
-          
       p Start Date:
         input(type="date" id="start_date" name="start_date" placeholder="").form-control
       p End Date:
@@ -16,8 +15,8 @@ block content
         input(type="number" id="amount" name="amount" value=50).form-control
       p Period:
         select(id="period" name="period").form-control
-          option(value="d") Daily
           option(value="w") Weekly
+          option(value="d") Daily
       p API:
         select(id="api" name="api").form-control
           option(value="yahoo") Yahoo
