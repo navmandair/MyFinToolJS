@@ -22,7 +22,9 @@ $(document).ready(function() {
   var now = new Date();
   var day = ("0" + now.getDate()).slice(-2);
   var month = ("0" + (now.getMonth() + 1)).slice(-2);
+  var start_date = (now.getFullYear()-1) + "-" + (month) + "-" + (day);
   var today = now.getFullYear() + "-" + (month) + "-" + (day);
+  $('#start_date').val(start_date);
   $('#end_date').val(today);
 
 });
@@ -32,9 +34,8 @@ $(document).ready(function() {
 $('#tickers').select2({
   ajax: {
     url: '/ticker/search',
-
-    delay: 1000,
-
+    delay: 500,
+    minimumInputLength: 3,
     data: function (params) {
       var query = {
         search_key: params.term,
@@ -42,6 +43,9 @@ $('#tickers').select2({
       }
       return query;
     },
+
+    delay: 500,
+    minimumInputLength: 3,
 
     processResults: function (arrayData, params) {
       

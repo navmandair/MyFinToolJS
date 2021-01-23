@@ -11,7 +11,6 @@ router.get('/search', function(req, res, next) {
     const searchKey = req.query.search_key;
     if(searchKey) {
       result = DataProvider.searchTicker(searchKey, function(response){
-        console.log(response.bestMatches);
         res.send(response.bestMatches);
       });
     }
