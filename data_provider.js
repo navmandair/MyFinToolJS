@@ -44,6 +44,42 @@ const searchTicker = (searchKey, callback) => {
 
 }
 
+const popularTickers = (callback) => {
+  let requestURL = `/api/2/trending/symbols.json`;
+  const options = {
+    hostname: 'api.stocktwits.com',
+    path: requestURL,
+    method: 'GET'
+  }
+  console.log(`requestURL: ${requestURL}`);
+  const req = https.request(options, (res) => {
+    let data = ''
+    console.log(`statusCode: ${res.statusCode}`)
+    res.on('data', d => {
+      data += d
+    })
+
+    res.on('end', function() {
+      try {
+        console.log(`statusCode: ${data}`)
+        return callback(JSON.parse(data));
+      }
+      catch
+      {
+        console.log(`failed to parse response from : ${requestURL}`);
+        return callback({});
+      }
+    });
+  });
+
+  req.on('error', error => {
+    console.error(error)
+  });
+
+  req.end();
+
+}
+
 const historicalData = (symbol) => {
   return new Promise((resolve, reject) => {
     let outputSize = 'full';
@@ -91,6 +127,7 @@ const historicalData = (symbol) => {
 
 module.exports = {
   searchTicker,
+  popularTickers,
   historicalData
 }
 

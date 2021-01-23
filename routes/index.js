@@ -1,5 +1,6 @@
 const yahooFinance = require('yahoo-finance');
-var express = require('express');
+const express = require('express');
+const fs = require('fs');
 var router = express.Router();
 const DataProvider = require('../data_provider.js');
 
@@ -25,6 +26,7 @@ router.get('/result', (req, res) => {
     }
     historicalDataMultiple(api, tickers, from_date, to_date, period, amount).then(
       function(value) {
+        writeSearchLog(tickers.toString());
         res.render('index', {
           "error": "No Error",
           "rows": value
@@ -155,5 +157,11 @@ function performance(ticker, from_date, period, data, amount_investing) {
   }
 }
 
+function writeSearchLog(text){
+  fs.writeFile('search_log.txt', text, function (err) {
+  if (err) return console.log(err);
+  console.log('logged:', text);
+});
+}
 
 module.exports = router;

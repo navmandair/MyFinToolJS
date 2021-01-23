@@ -18,6 +18,23 @@ router.get('/search', function(req, res, next) {
   catch(e)
   {
     console.log(e);
+    res.send([]);
+  }
+});
+
+
+/* GET ticker */
+router.get('/popular', function(req, res, next) {
+  try
+  {
+    DataProvider.popularTickers(function(response){
+        res.send(response.symbols);
+    });
+  }
+  catch(e)
+  {
+    console.log(e);
+    res.send([]);
   }
 });
 
