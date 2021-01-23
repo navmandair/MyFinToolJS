@@ -5,7 +5,7 @@ const DataProvider = require('../data_provider.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'My Fin Tool' });
+  res.render('index', { title: 'My Fin Tool', "rows": []  });
 });
 
 router.get('/result', (req, res) => {
@@ -24,8 +24,18 @@ router.get('/result', (req, res) => {
       tickers.push(tickers_raw)
     }
     historicalDataMultiple(api, tickers, from_date, to_date, period, amount).then(
-      function(value) { res.render('performance', { "error": "No Error", "rows": value }); },
-      function(error) { res.render('performance', { "error": error, "rows": [] }); }
+      function(value) {
+        res.render('index', {
+          "error": "No Error",
+          "rows": value
+        });
+      },
+      function(error) { 
+        res.render('index', { 
+          "error": error,
+          "rows": [] 
+          }); 
+      }
     );
 
   }
@@ -37,15 +47,13 @@ router.get('/result', (req, res) => {
 async function historicalDataMultiple(api, tickers, from_date, to_date, period, amount) {
   var rows = [];
   tickers.forEach(ticker => {
-    if(api == 'yahoo')
-    {
+    if (api == 'yahoo') {
       rows.push(yFinance(ticker, from_date, to_date, period, amount));
     }
-    else if (api == 'alphavantage')
-    {
+    else if (api == 'alphavantage') {
       rows.push(alphavantage(ticker, from_date, to_date, period, amount));
     }
-    
+
     //console.log(row);
   });
   //console.log(rows);
