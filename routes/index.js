@@ -5,7 +5,7 @@ const DataProvider = require('../data_provider.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'My Fin Tool', "rows": []  });
+  res.render('index', { "rows": []  });
 });
 
 router.get('/result', (req, res) => {
