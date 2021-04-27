@@ -6,7 +6,7 @@ const DataProvider = require('../data_provider.js');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('index', { "rows": []  });
+  res.render('index', { "rows": [] });
 });
 
 router.get('/result', (req, res) => {
@@ -32,11 +32,11 @@ router.get('/result', (req, res) => {
           "rows": value
         });
       },
-      function(error) { 
-        res.render('index', { 
+      function(error) {
+        res.render('index', {
           "error": error,
-          "rows": [] 
-          }); 
+          "rows": []
+        });
       }
     );
 
@@ -70,7 +70,6 @@ async function yFinance(ticker, from_date, to_date, period, amount) {
     to: to_date,
     period: "d"
   });
-
   let quotes = await promise;
   return performance(ticker, from_date, period, quotes.reverse(), amount);
 }
@@ -82,7 +81,7 @@ async function alphavantage(ticker, from_date, to_date, period, amount) {
   return performance(ticker, from_date, period, quotes.reverse(), amount);
 }
 
-function performance(ticker, from_date, period, data, amount_investing) {
+async function performance(ticker, from_date, period, data, amount_investing) {
   amount_invested = 0;
   number_of_shares = 0;
   last_close = 0;
@@ -111,6 +110,11 @@ function performance(ticker, from_date, period, data, amount_investing) {
     console.log("Required Data Extracted: ", new_data.length, " rows");
   }
 
+  let supplementaryData = await yahooFinance.quote({
+      symbol: ticker,
+      modules: ['defaultKeyStatistics']
+    });
+  console.log("defaultKeyStatistics =", supplementaryData.defaultKeyStatistics);
   try {
     oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     //console.log("oneDay");
@@ -132,7 +136,10 @@ function performance(ticker, from_date, period, data, amount_investing) {
     //console.log("total_gain:", total_gain);
     performance_pa = total_gain / years_invested;
     //console.log("performance_pa:", performance_pa);
-
+    graham_value_price = (22.5 * supplementaryData.defaultKeyStatistics.trailingEps *  supplementaryData.defaultKeyStatistics.bookValue);
+    //console.log("graham_value_price:", graham_value_price, " = ", supplementaryData.defaultKeyStatistics.forwardEps, " * ",  supplementaryData.defaultKeyStatistics.bookValue);
+    
+    
     let returnData = {
       "ticker": ticker,
       "start_date": new Date(first_date).toDateString(),
@@ -146,6 +153,7 @@ function performance(ticker, from_date, period, data, amount_investing) {
       "current_value": current_value.toFixed(2),
       "total_gain": total_gain.toFixed(2),
       "performance_pa": performance_pa.toFixed(2),
+      "graham_value_price": graham_value_price.toFixed(2),
       "data_rows": new_data
     }
     //console.log(returnData);
@@ -157,11 +165,11 @@ function performance(ticker, from_date, period, data, amount_investing) {
   }
 }
 
-function writeSearchLog(text){
-  fs.writeFile('search_log.txt', text, function (err) {
-  if (err) return console.log(err);
-  console.log('logged:', text);
-});
+function writeSearchLog(text) {
+  fs.writeFile('search_log.txt', text, function(err) {
+    if (err) return console.log(err);
+    console.log('logged:', text);
+  });
 }
 
 module.exports = router;

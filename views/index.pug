@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1 Welcome to My Fin Tool
+  h3 Fin Tool
   div.form-group
     form(action="/result" method="GET")
       p Ticker:
@@ -28,10 +28,11 @@ block content
       th Start Date
       th End Date
       th Period
-      th Lowest Price Date
-      th Lowest Price*
+      th Highest Price Drop Date
+      th Highest Price Drop*
       th Avg Price
       th Last Price
+      th Graham Price
       th Amount Invested
       th Current Value
       th Total Gain %
@@ -46,6 +47,7 @@ block content
         td= row.stop_loss
         td= row.avg_price_per_share
         td= row.last_price
+        td= row.graham_value_price
         td= row.amount_invested
         td= row.current_value
         td= row.total_gain
