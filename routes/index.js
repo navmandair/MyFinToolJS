@@ -1,8 +1,11 @@
 const yahooFinance = require('yahoo-finance');
 const express = require('express');
 const fs = require('fs');
+const PouchDB = require('pouchdb');
 var router = express.Router();
 const DataProvider = require('../data_provider.js');
+
+var db = new PouchDB('fin_tool_db');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -56,10 +59,9 @@ async function historicalDataMultiple(api, tickers, from_date, to_date, period, 
       rows.push(alphavantage(ticker, from_date, to_date, period, amount));
     }
 
-    //console.log(row);
   });
-  //console.log(rows);
   rows = await Promise.all(rows);
+  //console.log("ROWS: ", rows);
   return rows;
 }
 
@@ -136,8 +138,9 @@ async function performance(ticker, from_date, period, data, amount_investing) {
     //console.log("total_gain:", total_gain);
     performance_pa = total_gain / years_invested;
     //console.log("performance_pa:", performance_pa);
-    graham_value_price = (22.5 * supplementaryData.defaultKeyStatistics.trailingEps *  supplementaryData.defaultKeyStatistics.bookValue);
-    //console.log("graham_value_price:", graham_value_price, " = ", supplementaryData.defaultKeyStatistics.forwardEps, " * ",  supplementaryData.defaultKeyStatistics.bookValue);
+    graham_fair_price = Math.sqrt((22.5 * supplementaryData.defaultKeyStatistics.forwardEps *  supplementaryData.defaultKeyStatistics.bookValue));
+
+    graham_value_price = Math.sqrt(supplementaryData.defaultKeyStatistics.forwardEps *  (8.5));
     
     
     let returnData = {
@@ -153,6 +156,7 @@ async function performance(ticker, from_date, period, data, amount_investing) {
       "current_value": current_value.toFixed(2),
       "total_gain": total_gain.toFixed(2),
       "performance_pa": performance_pa.toFixed(2),
+      "graham_fair_price": graham_fair_price.toFixed(2),
       "graham_value_price": graham_value_price.toFixed(2),
       "data_rows": new_data
     }
